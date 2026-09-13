@@ -1,5 +1,7 @@
 # LEGO Resale v1.0 Alpha.3
 
+© 2026 Chris Donaldson. All rights reserved. See [LICENSE](LICENSE) — this code is shared publicly for demonstration purposes only; no reuse is licensed.
+
 Alpha.3 completes the first end-to-end Model-Assisted Import path.
 
 ## New in alpha.3
