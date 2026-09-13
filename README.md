@@ -1,6 +1,16 @@
 # LEGO Resale v1.0 Alpha.3
 
-© 2026 Chris Donaldson. All rights reserved. See [LICENSE](LICENSE) — this code is shared publicly for demonstration purposes only; no reuse is licensed.
+© 2026 Chris Donaldson. Licensed under the [MIT License](LICENSE) — free to use, modify, and reuse.
+
+## Privacy note for anyone running their own instance
+
+This repo contains only application code. Real inventory, customer records,
+sale history, and photos live in a local SQLite database and a local
+`storage/` folder that are excluded from git via `.gitignore` — they are
+never committed, and no real personal or transaction data has ever been
+part of this repository's history. If you fork or run your own instance,
+your own data stays local the same way; just make sure any new
+data-bearing files you add stay covered by `.gitignore` too.
 
 Alpha.3 completes the first end-to-end Model-Assisted Import path.
 
