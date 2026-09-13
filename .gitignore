@@ -1,0 +1,19 @@
+# Runtime data — never commit real inventory/customer/sale data or photos.
+storage/lego_resale.sqlite
+storage/lego_resale.sqlite-wal
+storage/lego_resale.sqlite-shm
+storage/lego_resale.sqlite-journal
+storage/photos/*
+storage/imports/*
+storage/backups/*
+!storage/photos/.gitkeep
+!storage/imports/.gitkeep
+!storage/backups/.gitkeep
+
+# Bulk Rebrickable catalog downloads (large, re-downloadable via catalog_update.php).
+data/catalog_seed/*
+!data/catalog_seed/.gitkeep
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db

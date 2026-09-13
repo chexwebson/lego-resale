@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LEGO Resale v1 Alpha</title><link rel="stylesheet" href="styles.css?v=1.0-alpha.3.13"></head>
+<body>
+<header><div><h1>LEGO Resale</h1><span class="badge" id="versionBadge">version…</span></div><div class="headerRight"><span id="sync">Loading…</span><span id="userBadge" class="muted"></span><a id="logoutLink" href="logout.php">Log out</a></div></header>
+<nav>
+<button data-view="dashboard" class="active">Dashboard</button>
+<button data-view="inventory">Inventory</button>
+<button data-view="catalog">Catalog</button>
+<button data-view="customers">Customers</button>
+<button data-view="ai">Model-Assisted Import</button>
+</nav>
+<main>
+<section id="dashboard" class="view active">
+<h2>Clean-slate architecture</h2>
+<div id="stats" class="cards"></div>
+<div class="panel"><h3>Core rule</h3><p><b>Catalog product ≠ physical inventory unit.</b> Each collectible physical copy gets its own immutable unit ID, photos, condition, valuation, listing and sale record.</p></div>
+</section>
+
+<section id="inventory" class="view">
+<div class="toolbar"><h2>Physical Inventory</h2><input id="unitSearch" placeholder="Search set, name or display ID"><button id="newUnit">Add unit</button></div>
+<div class="panel" id="portfolioPanel">
+<h3>Portfolio value</h3>
+<div id="portfolioHero" class="cards portfolioHero"></div>
+<div class="portfolioSplit">
+<div><h4>Remaining (in hand)</h4><div id="remainingSummary" class="cards inventorySummary"></div></div>
+<div><h4>Sold (realized)</h4><div id="realizedSummary" class="cards inventorySummary"></div></div>
+</div>
+<details><summary>Full breakdown</summary>
+<div class="summaryGroup"><h4>Unsold inventory detail</h4><div id="inventorySummary" class="cards inventorySummary"></div></div>
+<div class="summaryGroup"><h4>Sold inventory detail</h4><div id="soldSummary" class="cards inventorySummary"></div></div>
+</details>
+</div>
+<div class="panel povQueuePanel" id="povQueuePanel"><div class="toolbar"><h3>POV enrichment</h3><button id="queuePov">Queue missing/stale POV</button><button id="refreshAllPov">Force refresh all POV</button></div><div id="povQueueStatus" class="muted">Loading queue…</div><div id="povRecent"></div></div>
+<div id="unitTable"></div>
+</section>
+
+
+<section id="customers" class="view">
+<div class="toolbar"><h2>Customers & Interests</h2><input id="customerSearch" placeholder="Search name, org, email, notes…"><button id="newCustomer">Add customer</button></div>
+<div id="customerTable"></div>
+</section>
+
+<section id="catalog" class="view">
+<h2>Local LEGO Catalog</h2>
+<div class="panel">
+<h3>Search</h3><input id="catalogSearch" placeholder="Try 76058, 76058-1, Nighthawk…"><div id="catalogResults"></div>
+</div>
+<div class="panel">
+<h3>Catalog maintenance</h3>
+<p>The full local catalog now includes set composition, minifigures, exact part colors and quantities. Use the bundled snapshot now, or download the latest Rebrickable bulk files directly from the server.</p>
+<div class="grid5"><button id="seedAll">Load bundled 2026-08-12 snapshot</button><button id="updateAll">Download + load latest catalog</button><span id="bulkCatalogStatus"></span></div>
+<details><summary>Manual single-file import</summary><div class="grid5">
+<select id="catalogType"><option value="themes">themes</option><option value="sets">sets</option><option value="colors">colors</option><option value="part_categories">part_categories</option><option value="parts">parts</option><option value="inventories">inventories</option><option value="minifigs">minifigs</option><option value="inventory_parts">inventory_parts</option><option value="inventory_minifigs">inventory_minifigs</option><option value="inventory_sets">inventory_sets</option></select>
+<input id="catalogFile" type="file" accept=".csv,.gz"><button id="catalogImport">Import one file</button><span id="catalogImportStatus"></span></div></details>
+</div>
+</section>
+
+<section id="ai" class="view">
+<h2>Model-Assisted Import</h2>
+<div class="panel">
+<p>Upload a complete <b>LRX v1 ZIP package</b> containing the manifest and the actual photos. The package is staged first; nothing becomes authoritative inventory until you approve each proposal.</p>
+<input type="file" id="packageFile" accept=".zip"><button id="packageUpload">Upload LRX package</button><span id="packageStatus"></span>
+</div>
+<div id="imports"></div>
+</section>
+</main>
+
+<dialog id="customerDialog"><form method="dialog" id="customerForm"><button class="close" value="cancel">×</button><h2 id="customerDialogTitle">Edit customer</h2><input type="hidden" id="customerId"><div class="grid"><label>Name <input id="customerName" required></label><label>Business / organization <input id="customerOrganization"></label><label>Email <input id="customerEmail" type="email"></label><label>Phone <input id="customerPhone" type="tel"></label></div><label>Marketplace profile / handle <input id="customerMarketplace" class="wideInput"></label><label>Notes <textarea id="customerNotes"></textarea></label><div class="buttonRow"><button type="button" id="saveCustomer">Save customer</button><button type="button" id="cancelCustomer">Cancel</button></div><div id="customerSaveStatus" class="muted"></div></form></dialog>
+<dialog id="unitDialog"><form method="dialog"><button class="close">×</button><div id="unitDetail"></div></form></dialog>
+<dialog id="compositionDialog"><form method="dialog"><button class="close">×</button><div id="compositionDetail"></div></form></dialog>
+<dialog id="imageDialog" class="imageDialog"><form method="dialog"><button class="close">×</button><img id="imageDialogImg" alt="Preview"></form></dialog>
+<dialog id="addDialog"><form method="dialog"><button class="close">×</button><h2>Add physical unit</h2><label>Exact catalog set number <input id="addSetNum" placeholder="76058-1"></label><div id="addLookup"></div><button type="button" id="createUnit">Create one physical unit</button></form></dialog>
+<dialog id="markSoldDialog"><form method="dialog"><button class="close" value="cancel">×</button><h2>Mark unit sold</h2>
+<div id="markSoldUnitLabel" class="muted"></div>
+<div class="grid">
+<label>Sold price <input id="soldPrice" type="number" step=".01" min="0.01" required></label>
+<label>Platform <select id="soldPlatform"><option value="facebook_marketplace">Facebook Marketplace</option><option value="ebay">eBay</option><option value="local_pickup">Local pickup</option><option value="other">Other</option></select></label>
+<label>Fees <input id="soldFees" type="number" step=".01" min="0" value="0"></label>
+<label>Shipping cost <input id="soldShipping" type="number" step=".01" min="0" value="0"></label>
+<label>Sold date <input id="soldDate" type="date"></label>
+</div>
+<h3>Buyer</h3>
+<label>Existing customer <input id="buyerSearch" list="buyerDatalist" placeholder="Type a name to find a customer, or leave blank for a new buyer"><datalist id="buyerDatalist"></datalist></label>
+<div id="newBuyerFields" class="grid">
+<label>New buyer name <input id="newBuyerName" placeholder="Leave blank if no buyer record is needed"></label>
+<label>Organization <input id="newBuyerOrg"></label>
+<label>Email <input id="newBuyerEmail" type="email"></label>
+<label>Phone <input id="newBuyerPhone" type="tel"></label>
+</div>
+<label>Buyer notes / interests <textarea id="buyerNotes" placeholder="Anything worth remembering about this buyer — what else they're interested in, how they found you, follow-up notes. Free text, searchable later from the Customers tab."></textarea></label>
+<div class="buttonRow"><button type="button" id="confirmMarkSold">Confirm sale</button><button type="button" id="cancelMarkSold">Cancel</button></div>
+<div id="markSoldStatus" class="muted"></div>
+</form></dialog>
+<dialog id="addInterestDialog"><form method="dialog"><button class="close" value="cancel">×</button><h2>Add customer interest</h2>
+<label>Customer <input id="interestBuyerSearch" list="interestBuyerDatalist" placeholder="Type a customer name" required><datalist id="interestBuyerDatalist"></datalist></label>
+<label>Target / offer price (optional) <input id="interestTarget" type="number" step=".01" min="0"></label>
+<label>Notes (optional)<textarea id="interestNotes" placeholder="What they're interested in, condition requirements, timeline — free text, searchable later."></textarea></label>
+<div class="buttonRow"><button type="button" id="confirmAddInterest">Save interest</button><button type="button" id="cancelAddInterest">Cancel</button></div>
+<div id="addInterestStatus" class="muted"></div>
+</form></dialog>
+<script src="app.js?v=1.0-alpha.3.13"></script></body></html>

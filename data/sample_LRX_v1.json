@@ -1,0 +1,42 @@
+{
+  "schema": "lego-resale-exchange-v1",
+  "schema_version": "1.0",
+  "batch": {
+    "batch_id": "SAMPLE-001",
+    "generator": "Example",
+    "created_at": "2026-08-12T13:00:00-04:00",
+    "photo_count": 0
+  },
+  "proposals": [
+    {
+      "item_type": "set",
+      "catalog": {
+        "set_num": "76058-1",
+        "name": "Spider-Man: Ghost Rider Team-Up"
+      },
+      "physical_units": 1,
+      "identification": {
+        "confidence": 0.99,
+        "review_required": false
+      },
+      "condition": {
+        "state": "new",
+        "sealed_status": "sealed",
+        "box_condition": "good",
+        "instructions_status": "not_applicable",
+        "completeness": "sealed_unverified"
+      },
+      "photos": [],
+      "valuation": {
+        "currency": "USD",
+        "msrp": 19.99,
+        "whole_new": 75,
+        "whole_used": 43,
+        "part_out_sold": null,
+        "part_out_for_sale": null,
+        "source_label": "sample"
+      },
+      "notes": "Sample proposal only."
+    }
+  ]
+}
